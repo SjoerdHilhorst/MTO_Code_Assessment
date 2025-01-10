@@ -5,6 +5,7 @@ public class FriendFoeIdentifier implements SimulationEventListener
   public FriendFoeIdentifier(EventBus eventBus) {
     this.eventBus = eventBus;
   }
+
   /** 
    * A Foe has more odd entries than even entries
    */
@@ -25,9 +26,6 @@ public class FriendFoeIdentifier implements SimulationEventListener
     return odd > even;
   }
 
-  /**
-   * Identification event is published if the target is a foe
-   */
   @Override
   public void handleEvent(SimulationEvent event) {
     RadarScanEvent radarEvent = (RadarScanEvent) event;
