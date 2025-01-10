@@ -1,5 +1,10 @@
-public class FriendFoeIdentifier implements Identifier
+public class FriendFoeIdentifier implements SimulationEventListener
 {
+  private EventBus eventBus;
+
+  public FriendFoeIdentifier(EventBus eventBus) {
+    this.eventBus = eventBus;
+  }
   /** 
    * A Foe has more odd entries than even entries
    */
@@ -20,14 +25,16 @@ public class FriendFoeIdentifier implements Identifier
     return odd > even;
   }
 
+  /**
+   * Identification event is published if the target is a foe
+   */
   @Override
-  public boolean identify(String target) {
-    if (hasMoreOddThanEven(target)) {
-      System.out.println("FriendFoeIdentifier: Target identified as Foe");
-      return true;
+  public void handleEvent(SimulationEvent event) {
+    RadarScanEvent radarEvent = (RadarScanEvent) event;
+    if (hasMoreOddThanEven(radarEvent.getRadarData())) {
+      eventBus.publish(new IdentificationEvent(true));
     } else {
-      System.out.println("FriendFoeIdentifier: Target identified as Friend");
-      return false;
+      eventBus.publish(new IdentificationEvent(false));
     }
   }
 }

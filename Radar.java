@@ -3,13 +3,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-class Radar implements Scanner
+class Radar implements SimulationEventListener
 {
   private BufferedReader reader;
   private String currentLine;
+  private EventBus eventBus;
 
-  public Radar(String filePath) throws FileNotFoundException {
+  public Radar(String filePath, EventBus eventBus) throws FileNotFoundException {
       reader = new BufferedReader(new FileReader(filePath));
+      this.eventBus = eventBus;
   }
 
   public String getNextLine() throws IOException {
@@ -22,14 +24,12 @@ class Radar implements Scanner
   }
 
   @Override
-  public String scan() {
+  public void handleEvent(SimulationEvent event) {
     try {
       String line = getNextLine();
-      System.out.println("Radar: Scanning...");
-      return line;
+      eventBus.publish(new RadarScanEvent(line));
     } catch (IOException e) {
       e.printStackTrace();
-      return null;
     }
   }
 }

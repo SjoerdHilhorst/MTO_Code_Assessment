@@ -1,15 +1,19 @@
-public class MissileLauncher implements Firer {
+public class MissileLauncher implements SimulationEventListener {
 
   private double pk_ratio = 0.0f;
+  private EventBus eventBus;
   
-  public MissileLauncher(double pk_ratio) {
+  public MissileLauncher(double pk_ratio, EventBus eventBus) {
     this.pk_ratio = pk_ratio;
+    this.eventBus = eventBus;
   }
 
   @Override
-  public boolean fire() {
-    boolean hit = Math.random() < pk_ratio;
-    System.out.println("MissileLauncher: Missile " + (hit ? "hit" : "missed"));
-    return hit;
+  public void handleEvent(SimulationEvent event) {
+    IdentificationEvent idEvent = (IdentificationEvent) event;
+    if (idEvent.isEnemy()) {
+      boolean hit = Math.random() < pk_ratio;
+      eventBus.publish(new MissileLaunchEvent(hit));
+    }
   }
 }
