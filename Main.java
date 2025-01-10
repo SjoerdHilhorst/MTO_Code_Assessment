@@ -4,9 +4,11 @@ public class Main {
 
   public static void main(String[] args) {
     try {
+      // Event bus and simulation
       EventBus eventBus = new EventBus();
       Simulation simulation = new Simulation(eventBus);
       
+      // Simulation components
       Radar radar = new Radar("radar_data.csv", eventBus);
       FriendFoeIdentifier identifier = new FriendFoeIdentifier(eventBus);
       MissileLauncher firer = new MissileLauncher(0.8, eventBus);
